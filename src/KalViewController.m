@@ -38,7 +38,7 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
 
 @implementation KalViewController
 
-@synthesize dataSource, delegate, initialDate, selectedDate;
+@synthesize dataSource, delegate, initialDate, selectedDate, calendarDelegate;
 
 - (id)initWithSelectedDate:(NSDate *)date
 {
@@ -122,6 +122,12 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
   [self reloadData];
 }
 
+- (void)userSelectedDate:(KalDate *)date
+{
+    [self didSelectDate:date];
+    [calendarDelegate dateSelected:selectedDate];
+}
+
 // -----------------------------------------
 #pragma mark KalDataSourceCallbacks protocol
 
@@ -182,7 +188,7 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
 - (void)loadView
 {
   if (!self.title)
-    self.title = @"Calendar";
+    self.title = NSLocalizedString(@"Calendar", nil);
   KalView *kalView = [[[KalView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] delegate:self logic:logic] autorelease];
   self.view = kalView;
   tableView = kalView.tableView;
